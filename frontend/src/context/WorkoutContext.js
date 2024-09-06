@@ -33,3 +33,4 @@ export const WorkoutContextProvider = ({children})=>{
         </WorkoutContext.Provider>
     )
 }
+

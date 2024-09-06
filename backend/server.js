@@ -1,10 +1,20 @@
 const express = require('express');
 require('dotenv').config();
 const wrokoutRoutes = require('./routes/workouts');
+const userRoutes = require('./routes/user');
 const mongoose = require('mongoose');
 
 // express app
 const app = express();
+
+// cors
+app.use(cors(
+    {
+        origin: ["https://deploy-mern-1whq.vercel.app"],
+        method: ["POST", "GET"],
+        credentials: true
+    }
+))
 
 //middleware
 app.use(express.json());
@@ -15,6 +25,8 @@ app.use((req,res,next)=>{
 
 // routes
 app.use('/api/workouts', wrokoutRoutes);
+app.use('/api/user', userRoutes);
+
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI)
