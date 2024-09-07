@@ -13,39 +13,49 @@ function WorkoutForm() {
     const {user} = useAuthContext();
 
     
-    const handleSubmit = async (e)=> {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!user) {
-            setError('You must be logged in')
-            return
+        if (!user) {
+            setError('You must be logged in');
+            return;
         }
-
-        const workout = {title, load, reps}
-
-        const response = await fetch('/api/workouts', {
-            method: 'POST',
-            body: JSON.stringify(workout),
-            headers: {
-                'Content-Type': 'application/json',
-                'Autherization': `Bearer ${user.token}`
+    
+        const workout = { title, load, reps };
+    
+        try {
+            const response = await fetch('/api/workouts', {
+                method: 'POST',
+                body: JSON.stringify(workout),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+    
+            let json;
+            try {
+                json = await response.json();
+            } catch (err) {
+                throw new Error('Invalid JSON response');
             }
-        })
-        const json = await response.json()
-
-        if(!response.ok){
-            setError(json.error)
-            setEmptyFields(json.emptyFields)
+    
+            if (!response.ok) {
+                setError(json.error || 'Something went wrong');
+                setEmptyFields(json.emptyFields || []);
+            } else {
+                setError(null);
+                setEmptyFields([]);
+                setTitle('');
+                setLoad('');
+                setReps('');
+                console.log('New Workout Added');
+                dispatch({ type: 'CREATE_WORKOUT', payload: json });
+            }
+        } catch (err) {
+            setError(err.message);
         }
-        if(response.ok){
-            setError(null)
-            setEmptyFields([])
-            setTitle('')
-            setLoad('')
-            setReps('')
-            console.log('New Workout Added')
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
-    }
-        } 
+    };
+    
 
     return (
         <form className="create" onSubmit={handleSubmit}>
