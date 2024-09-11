@@ -35,10 +35,13 @@ header a {
 /* homepage */
 .home {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 100px;
+  gap: 20px;
+}
+.create{
+  grid-row: 1;
 }
 .workout-details {
+  grid-row: 2;
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
@@ -127,4 +130,35 @@ form.signup, form.login {
   padding: 20px;
   background: #fff;
   border-radius: 4px;
+}
+
+.email{
+  display: none;
+}
+
+@media screen and (min-width: 576px) {
+  .email{
+    display: inline-block;
+  }
+
+  .create{
+    grid-column: 2;
+  }
+  .workout-details{
+    grid-column: 1;
+  }
+
+  
+}
+
+@media screen and (min-width: 768px) {
+  .home{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .home{
+    grid-template-columns: 3fr 1fr;
+  }
 }
